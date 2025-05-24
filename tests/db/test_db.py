@@ -1,4 +1,10 @@
-import sqlite3
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from app.db import connection
+
 
 def test_sqlite_in_memory_db_accessible():
     # Test data variables
@@ -6,18 +12,8 @@ def test_sqlite_in_memory_db_accessible():
     test_username = "testuser"
     test_hashed_password = "fakehash"
 
-    # Create an in-memory SQLite database and a users table
-    conn = sqlite3.connect(":memory:")
+    conn = connection.create_database(test_mode=1)
     cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            username TEXT NOT NULL,
-            hashed_password TEXT NOT NULL
-        )
-    """)
-    conn.commit()
 
     # Insert a test user into the users table using variables
     cursor.execute(
