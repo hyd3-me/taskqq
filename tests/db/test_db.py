@@ -1,9 +1,11 @@
 import sys
 import os
+from pathlib import Path
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.db import connection
+import config
 
 
 def test_sqlite_in_memory_db_accessible():
@@ -31,3 +33,9 @@ def test_sqlite_in_memory_db_accessible():
     assert user is not None
     assert user[0] == test_email
     assert user[1] == test_username
+
+def test_db_directory_exists():
+    # Create the directory if it doesn't exist (optional)
+    config.DB_DIR.mkdir(parents=True, exist_ok=True)
+    # Check if the database directory exists
+    assert config.DB_DIR.is_dir(), f"Database directory {config.DB_DIR} does not exist"
